@@ -1,0 +1,10 @@
+{
+  "name": "softcrypt",
+  "productName": "softcrypt",
+  "version": "1.0.0",
+  "author": "cwyang",
+  "description": "软加密模块",
+  "license": "BSD-2-Clause",
+  "repository": "cwyang@zjft.com",
+  "main": "./softcrypt.js"
+}
