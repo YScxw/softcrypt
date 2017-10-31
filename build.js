@@ -111,7 +111,7 @@ function afterBuild() {
 
 function removeALL(filePath) {
 	if (fs.statSync(filePath).isDirectory()) {
-		fs.readdirSync(filePath).forEach((fileName) => {
+		fs.readdirSync(filePath).forEach(function(fileName){
 			removeALL(path.join(filePath, fileName))
 		})
 		fs.rmdirSync(filePath)

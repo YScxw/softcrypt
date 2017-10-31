@@ -92,10 +92,10 @@ namespace demo {
 		Local<Value> data = args[0];
 		Local<Value> flag = args[1];
 		Local<Value> key = args[2];
-
+		
 		String::Utf8Value sstr(data);
 		String::Utf8Value sKey(key);
-
+		
 		int value = flag->Int32Value();
 		if (strlen(sKey.operator*()) != 32) {
 			isolate->ThrowException(v8::Exception::TypeError(
