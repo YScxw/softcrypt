@@ -1,4 +1,6 @@
-const DES = require('./softcrypt.js');
+//const DES = require('./softcrypt.js');
+const DES = require('./jssrc');
+
 
 console.log(new Date().getTime())
 console.log(DES.CalDES("3030303030303030","3030303030303030","E"));

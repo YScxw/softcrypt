@@ -93,8 +93,11 @@ function afterBuild() {
 	var installPath = path.join(__dirname, 'bin', modPath, 'softcrypt.node');
 
 	try {
+		if(!fs.existsSync(path.join(__dirname, 'bin'))) fs.mkdirSync(path.join(__dirname, 'bin'));
 		fs.mkdirSync(path.join(__dirname, 'bin', modPath));
-	} catch (ex) {}
+	} catch (ex) {
+		console.log(ex)
+	}
 
 	try {
 		fs.statSync(targetPath);
@@ -107,7 +110,6 @@ function afterBuild() {
 		fs.renameSync(targetPath, installPath);
 	} catch (ex) {
 		console.error('Build succeeded but renameSync failed');
-		process.exit(1);
 	}
 	
 	console.log('Installed in `'+ installPath+ '`');

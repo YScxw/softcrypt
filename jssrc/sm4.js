@@ -28,19 +28,10 @@ function rightMove(a, step) {
     if(a >= 0) {
         return a >> step
     } else {
-        var str = (-a - 1).toString(2)
-        str = strfix(str, 32)
+        var str = (-a).toString(2)
+        str = '1' + strfix(str, 31)
         str = str.slice(0, 32 - step)
-        var result = ''
-        for (var i = 0; i < 32 - step; i++) {
-            if (str[i] === '0') {
-                result += '1'
-            } else {
-                result += '0'
-            }
-        }
-
-        return parseInt(result, 2)
+        return parseInt(str, 2)
     }
 }
 
