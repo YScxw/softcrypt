@@ -1,4 +1,8 @@
 #!/usr/bin/env node
+if (process.platform === 'ios' || process.platform === 'android') {
+	console.log(`android or ios use javascript crypt`)
+	process.exit();
+}
 var cp = require('child_process'),
 	fs = require('fs'),
 	path = require('path');
@@ -57,30 +61,30 @@ function build() {
 	cp.spawn(
 		process.platform === 'win32' ? 'node-gyp.cmd' : 'node-gyp',
 		['rebuild'].concat(args),
-		{stdio: [process.stdin, process.stdout, process.stderr]})
-	.on('exit', function(err) {
-		if (err) {
+		{ stdio: [process.stdin, process.stdout, process.stderr] })
+		.on('exit', function (err) {
+			if (err) {
+				console.error(
+					'node-gyp exited with code: ' + err + '\n' +
+					'Please make sure you are using a supported platform and node version. If you\n' +
+					'would like to compile softcrypt on this machine please make sure you have setup your\n' +
+					'build environment--\n' +
+					'Windows + OS X instructions here: https://github.com/nodejs/node-gyp\n' +
+					'Ubuntu users please run: `sudo apt-get install g++ build-essential`\n' +
+					'Alpine users please run: `sudo apk add python make g++`'
+				);
+				return process.exit(err);
+			}
+			afterBuild();
+		})
+		.on('error', function (err) {
 			console.error(
-				'node-gyp exited with code: '+ err+ '\n'+
-				'Please make sure you are using a supported platform and node version. If you\n'+
-				'would like to compile softcrypt on this machine please make sure you have setup your\n'+
-				'build environment--\n'+
-				'Windows + OS X instructions here: https://github.com/nodejs/node-gyp\n'+
-				'Ubuntu users please run: `sudo apt-get install g++ build-essential`\n'+
-				'Alpine users please run: `sudo apk add python make g++`'
+				'node-gyp not found! Please ensure node-gyp is in your PATH--\n' +
+				'Try running: `sudo npm install -g node-gyp`'
 			);
-			return process.exit(err);
-		}
-		afterBuild();
-	})
-	.on('error', function(err) {
-		console.error(
-			'node-gyp not found! Please ensure node-gyp is in your PATH--\n'+
-			'Try running: `sudo npm install -g node-gyp`'
-		);
-		console.log(err.message);
-		process.exit(1);
-	});
+			console.log(err.message);
+			process.exit(1);
+		});
 }
 
 // Move it to expected location
@@ -98,7 +102,14 @@ function afterBuild() {
 		console.error('Build succeeded but target not found');
 		process.exit(1);
 	}
-	fs.renameSync(targetPath, installPath);
+
+	try {
+		fs.renameSync(targetPath, installPath);
+	} catch (ex) {
+		console.error('Build succeeded but renameSync failed');
+		process.exit(1);
+	}
+	
 	console.log('Installed in `'+ installPath+ '`');
 	removeALL(path.join(__dirname, 'build'))
 	if (process.versions.electron) {

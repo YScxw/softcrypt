@@ -1,7 +1,7 @@
 {
   "name": "softcrypt",
   "productName": "softcrypt",
-  "version": "1.0.5",
+  "version": "2.0.0",
   "author": "cwyang",
   "description": "软加密模块",
   "license": "BSD-2-Clause",
