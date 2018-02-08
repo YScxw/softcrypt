@@ -1,5 +1,15 @@
-var des = require('./des.js')
-var sm4 = require('./sm4.js')
+var des, sm4;
+try {
+    des = require('./des.js')
+} catch (error) {
+    des = new DES()
+}
+
+try {
+    sm4 = require('./sm4.js')
+} catch (error) {
+    sm4 = SM4
+}
 
 var softcrypt = {
     CalDES: des.CalDES,
@@ -9,4 +19,8 @@ var softcrypt = {
     CalSM4MAC: sm4.SM4MACGenerated
 }
 
-module.exports = softcrypt
+try {
+    module.exports = softcrypt
+} catch (error) {
+
+}

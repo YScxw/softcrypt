@@ -1,5 +1,5 @@
-//const DES = require('./softcrypt.js');
-const DES = require('./jssrc');
+const DES = require('./softcrypt.js');
+//const DES = require('./jssrc');
 
 
 console.log(new Date().getTime())
