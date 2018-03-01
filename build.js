@@ -28,7 +28,6 @@ if (!debug) {
 }
 if (!{ia32: true, x64: true, arm: true, arm64: true, ppc: true, ppc64: true, s390: true, s390x: true}.hasOwnProperty(arch)) {
 	console.error('Unsupported (?) architecture: `'+ arch+ '`');
-	process.exit(1);
 }
 
 // Test for pre-built library
@@ -73,7 +72,7 @@ function build() {
 					'Ubuntu users please run: `sudo apt-get install g++ build-essential`\n' +
 					'Alpine users please run: `sudo apk add python make g++`'
 				);
-				return process.exit(err);
+				return;
 			}
 			afterBuild();
 		})
@@ -83,7 +82,6 @@ function build() {
 				'Try running: `sudo npm install -g node-gyp`'
 			);
 			console.log(err.message);
-			process.exit(1);
 		});
 }
 
@@ -103,7 +101,6 @@ function afterBuild() {
 		fs.statSync(targetPath);
 	} catch (ex) {
 		console.error('Build succeeded but target not found');
-		process.exit(1);
 	}
 
 	try {
