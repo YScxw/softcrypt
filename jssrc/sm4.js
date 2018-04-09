@@ -233,10 +233,10 @@ var SM4 = {};
         var buf2 = hex2Array(str2)
 
         var result = ''
-
         for (var i = 0; i < 16; i++) {
-            result += (buf1[1] ^ buf2[i]).toString(16).toUpperCase()
+            result +=  strfix((buf1[i] ^ buf2[i]).toString(16).toUpperCase(), 2)
         }
+
         return result
     }
 
@@ -257,14 +257,17 @@ var SM4 = {};
             return "";
         }
         var len = szData.length
-        var count = Math.floor(len / 32)
-        if (len % 32 !== 0) {
-            count += 1;
-            len = count * 32
-        }
+        var count = len % 32
+        if(count !== 0) {
+            count = 32 - count
+            len += count
+            while (count --) {
+                szData += '0'
+            }
+        } 
+
         var ctx = new sm4_context()
         var lpbKey = hex2Array(szSM4Key)
-
         if (sCryptFlag === SM4_ENCRYPT) {
             sm4_setkey_enc(ctx, lpbKey); //加密
         } else {
@@ -291,15 +294,17 @@ var SM4 = {};
         var count = Math.floor(len / 32)
         if (len % 32 !== 0) {
             count += 1;
+            var dvalue = count * 32 - len
+            while(dvalue--) szData += '0';
             len = count * 32
         }
+ 
         var szResult = '', macString = '';
         for (var i = 0; i < count; i++) {
             macString = szData.slice(32 * i, 32 * (i + 1))
             if (i > 0) {
                 macString = HEXStrXOR(macString, szResult);
             }
-
             szResult = SM4.SM4CryptECB(macString, 1, szSM4Key);
         }
         return szResult
